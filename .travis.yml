@@ -9,11 +9,13 @@ script:
   - vendor/bin/behat
   - vendor/bin/simple-phpunit
 deploy:
-  on:
-    branch: staging
   - provider: s3
+    on:
+      branch: staging
     # rest of S3 deployment for MyApp.zip
   - provider: codedeploy
+    on:
+      branch: staging
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: "sf3-devops"
