@@ -10,6 +10,7 @@ script:
   - vendor/bin/simple-phpunit
 deploy:
   - provider: s3
+    skip_cleanup: true
     on:
       branch: staging
     # rest of S3 deployment for MyApp.zip
