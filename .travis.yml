@@ -10,17 +10,23 @@ script:
   - vendor/bin/simple-phpunit
 deploy:
   - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: "sf3-devops"
     skip_cleanup: true
+    region: eu-west-2
     on:
       branch: staging
     # rest of S3 deployment for MyApp.zip
   - provider: codedeploy
-    on:
-      branch: staging
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: "sf3-devops"
     key: latest/MyApp.zip
     application: sf3-devops
-    deployment_group: MyDeploymentGroup
+    deployment_group: sf3-devops
     region: eu-west-2
+    on:
+      branch: staging
+after_deploy:
+  - echo "Deploy with success"
