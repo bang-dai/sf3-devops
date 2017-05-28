@@ -23,7 +23,7 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: "sf3-devops"
     key: latest/MyApp.zip
-    application: sf3-devops
+    application: TestApplication
     deployment_group: sf3-devops
     region: eu-west-2
     on:
