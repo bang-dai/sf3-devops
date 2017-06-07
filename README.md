@@ -17,3 +17,7 @@ Scrutinizer
 CI : 
 ---
 Travis
+
+Deployment AWS:
+-----------
+Auto deployment from Travis to AWS EC2 
