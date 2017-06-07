@@ -1,10 +1,49 @@
 language: php
+
 php:
-  - '7.0'
   - '7.1'
+
 before_script:
   - cd /home/travis/build/bang-dai/sf3-devops
   - composer install
+
 script:
   - vendor/bin/behat
   - vendor/bin/simple-phpunit
+
+before_deploy:
+  - zip -r sf3-devops.zip . || true
+  - mkdir -p "build"
+  - mv sf3-devops.zip build/sf3-devops.zip || true
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    local_dir: build
+    bucket: "sf3-devops"
+    skip_cleanup: true
+    detect_encoding: true
+    region: eu-west-2
+    on:
+      branch: staging
+    # rest of S3 deployment for MyApp.zip
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: "sf3-devops"
+    key: sf3-devops.zip
+    bundle_type: zip
+    application: TestApplication
+    deployment_group: TestApplication
+    region: eu-west-2
+    on:
+      branch: staging
+
+after_deploy:
+  - echo "Deploy with success"
+
+notifications:
+  email:
+    recipients:
+      - bang.dai2@gmail.com
